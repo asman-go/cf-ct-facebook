@@ -6,10 +6,18 @@
 
 # Getting started
 
-`.env`:
+Facebook Graph API `.env` (find your credentials on the [Facebook App page](https://developers.facebook.com/apps).):
 
 ```
 FACEBOOK_CLIENT_ID=
 FACEBOOK_CLIENT_SECRET=
 ```
 
+DynamoDB `.env`:
+
+```
+DOCUMENT_API_ENDPOINT=
+REGION_NAME=us-east-1
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+```
