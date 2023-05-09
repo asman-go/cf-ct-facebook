@@ -1,4 +1,5 @@
 import asyncio
+import functions_framework
 import itertools
 import typing
 
@@ -24,7 +25,31 @@ async def task(domains: typing.List[str], config: Config) -> typing.List[str]:
     return result.keys()
 
 
-def handler(event, context):
+def event_handler(event, context):
+    config = Config()
+    if 'request' in event and 'domains' in event['request']:
+        domains: typing.List[str] = event['request']['domains']
+
+        data = asyncio.run(task(domains, config))
+        data = list(data)
+
+        return {
+            'response': {
+                'count': len(data),
+                'data': data
+            }
+        }
+
+    return {
+        'response': {
+            'text': 'Where are domains?'
+        }
+    }
+
+
+@functions_framework.http
+def gcp_http_handler(request):
+    event = request.get_json(silent=True)
     config = Config()
     if 'request' in event and 'domains' in event['request']:
         domains: typing.List[str] = event['request']['domains']
