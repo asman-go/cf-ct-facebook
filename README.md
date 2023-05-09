@@ -21,3 +21,9 @@ REGION_NAME=us-east-1
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ```
+
+# Prepare code for YCloud
+
+```
+git archive --format zip -o cf-ct-facebook.zip main
+```
