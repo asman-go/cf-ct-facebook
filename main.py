@@ -50,6 +50,7 @@ def event_handler(event, context):
 @functions_framework.http
 def gcp_http_handler(request):
     event = request.get_json(silent=True)
+    print('Event', event)
     config = Config()
     if 'request' in event and 'domains' in event['request']:
         domains: typing.List[str] = event['request']['domains']

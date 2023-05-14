@@ -46,6 +46,10 @@ class DocumentAPI(object):
                         'AttributeType': 'S'
                     },
                     {
+                        'AttributeName': 'domains',
+                        'AttributeType': 'S'
+                    },
+                    {
                         'AttributeName': 'issuer_name',
                         'AttributeType': 'S'
                     },
