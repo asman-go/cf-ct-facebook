@@ -1,4 +1,5 @@
 import boto3
+import json
 import typing
 
 from src.config import Config
@@ -77,6 +78,8 @@ class DocumentAPI(object):
         table = self.get_table(domain)
         with table.batch_writer() as batch:
             for cert in certificates:
+                _cert = cert.dict()
+                _cert['domains'] = json.dumps(cert.domains)
                 batch.put_item(
-                    Item=cert.dict()
+                    Item=_cert
                 )
