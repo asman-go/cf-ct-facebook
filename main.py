@@ -12,15 +12,27 @@ from src.models import CertificateInfo
 async def task(domains: typing.List[str], config: Config) -> typing.List[str]:
     result: typing.Dict[str, typing.List[CertificateInfo]] = dict()
 
+    # 1. Get information from Facebook Graph API
     async with FacebookGraph("https://graph.facebook.com", config) as fb_client:
         async def get_certificates(domain: str):
             result[domain] = await fb_client.get_certificates(domain)
 
         await asyncio.gather(*[get_certificates(domain) for domain in domains])
+    
+    # 2. If it is new domain we'll subscribe for updates
+        await fb_client.subscribe(domains)
 
-        dynamodb = DocumentAPI(config)
-        for domain in result:
-            dynamodb.upsert(domain, result[domain])
+    # 2. Send result to DynamoDB
+    dynamodb = DocumentAPI(config)
+    for parent_domain in result:
+        domains = []
+        certificates = result[parent_domain]
+        for certificate in certificates:
+            domains.extend[certificate.domains]
+
+        domains = list(set(domains))
+        dynamodb.upsert_domains(parent_domain, domains)
+        dynamodb.upsert_certificates(parent_domain, certificates)
 
     return result.keys()
 

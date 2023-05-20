@@ -69,3 +69,47 @@ class FacebookGraph(object):
             resource_path = f'/certificates?{urllib.parse.urlencode(query)}' if after else None
 
         return certificates
+
+    async def subscribe(self, domains: typing.List[str]):
+        URL = f'/{self._config.FACEBOOK_CLIENT_ID}/subscribe_domains'
+        body = {
+            'subscribe': ','.join(domains),
+            'access_token': self._config.FACEBOOK_CLIENT_SECRET
+        }
+        async with self._session.post(URL, body=body) as response:
+            if response.ok:
+                return True
+            else:
+                print(response)
+                return False
+    
+    async def unsubscribe(self, domains: typing.List[str]):
+        URL = f'/{self._config.FACEBOOK_CLIENT_ID}/subscribe_domains'
+        body = {
+            'unsubscribe': ','.join(domains),
+            'access_token': self._config.FACEBOOK_CLIENT_SECRET
+        }
+        async with self._session.post(URL, body=body) as response:
+            if response.ok:
+                return True
+            else:
+                print(response)
+                return False
+            
+    async def get_subscribed_domains(self):
+        query = {
+            'fields': 'domain',
+            'access_token': self._config.FACEBOOK_CLIENT_SECRET
+        }
+        URL = f'/{self._config.FACEBOOK_CLIENT_ID}/subscribe_domains{urllib.parse.urlencode(query)}'
+        async with self._session.get(URL) as response:
+            # TODO: there are pagination
+            ...
+            # Example:
+            """
+            {"data":[{"domain":"example.com","id":"1584179144975746"}],"paging":{"cursors":{"before":"QVFIU...","after":"QVFIU..."}}}
+            """
+
+        return None
+    
+    
