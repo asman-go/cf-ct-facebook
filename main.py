@@ -39,6 +39,28 @@ async def task(domains: typing.List[str], config: Config) -> typing.List[str]:
 
 def event_handler(event, context):
     config = Config()
+    # SQS Message Handler
+    if 'messages' in event:
+        for message in event['messages']:
+            if 'details' in message:
+                domain = message['details']['message']['body'].strip()
+                asyncio.run(task([domain], config))
+
+                return {
+                    'response': {
+                        'text': 'OK[SQS]',
+                        'status': 'OK'
+                    }
+                }
+            else:
+                return {
+                    'response': {
+                        'text': 'FAIL[SQS]',
+                        'status': 'FAIL'
+                    }
+                }
+
+    # Direct Call Handler
     if 'request' in event and 'domains' in event['request']:
         domains: typing.List[str] = event['request']['domains']
 
@@ -54,7 +76,7 @@ def event_handler(event, context):
 
     return {
         'response': {
-            'text': 'Where are domains?'
+            'text': 'Something Wrong'
         }
     }
 
@@ -82,7 +104,3 @@ def gcp_http_handler(request):
             'text': 'Where are domains?'
         }
     }
-
-
-# if __name__ == '__main__':
-#    print(handler({}, {}))
