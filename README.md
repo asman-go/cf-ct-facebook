@@ -1,5 +1,10 @@
 # CloudFunction for Facebook Graph API to get Certificate Transparency (CT) logs
 
+1. Запросить сертификаты для доменов
+2. Подписаться на обновления (если выйдет новый серт, мы это увидим)
+
+## Additional information
+
 - [How CT works](https://certificate.transparency.dev/howctworks/).
 - [How get credentials for Facebok Graph API](https://appsecurity.gitbook.io/devops/v/ppc/tech/api/famous-api/facebook-api)
 - [YDB Docs](https://ydb.tech/en/docs)
